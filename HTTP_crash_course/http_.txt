@@ -1,0 +1,73 @@
+HTTP -> hyper text transfer protocol
+
+URL - 
+URI -
+URN -
+
+what are http headers -> it is a metadata => key-value sent along with request & response. 
+-> use in => caching, authentication, manage state (user state -> guest, loggedIn, etc)
+x-prefix -> 2012[x-depricated]
+
+-> Request Headers = from client
+-> Response Headers = from server
+-> Representation Headers = encoding/ compression
+-> Payload Headers = data
+-> etc...
+
+MOST COMMON HEADERS ----->
+
+Accept : application/json
+User-Agent
+Authorization
+Content-Type
+Cookie
+cache-control
+
+CORS ----> (Cross Origin Resource Sharing)
+
+Access-Control-Allow-Origin
+Access-Control-Allow-Credential
+Access-Control-Allow-Method
+
+Security --->
+
+Cross-Origin-Embedder-Policy
+Cross-Origin-Opener-Policy
+Content-Security-Policy
+X-XSS-Protection
+
+HTTP Methods ---->
+Basic set of operations that can be used to interact with server.
+
+GET -> retreive a resource
+HEAD -> No message body (response headers only)
+OPTIONS -> what operations are available
+TRACE -> loopback test (get same data)
+DELETE -> remove resource
+PUT -> replace a resource
+POST -> interact with resource (mostly add)
+PATCH -> change part of resource
+
+
+HTTP STATUS CODE -> 
+1xx => informational
+2xx => success
+3xx => redirectional
+4xx => client error
+5xx => server error
+
+Most standard status ---->
+
+100 => Continue
+102 => Processing
+200 => Ok
+201 => Created
+202 => accepted
+307 => temporary redirect
+308 => permanent redirect
+400 => Bad request
+401 => Unathorized
+402 => Payment required
+404 => Not Found
+500 => Internal server error
+504 => Gateway timeout
