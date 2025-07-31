@@ -9,4 +9,6 @@ class ApiResponse
     }
 }
 
+export { ApiResponse };
+
 // read more about status codes.
