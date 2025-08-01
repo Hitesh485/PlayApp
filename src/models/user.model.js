@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
             type: String,
         },
     },
-    { timeStamps: true }
+    { timestamps: true }
 );
 
 // why use normal function here? -> callback fun does't have this ref.

@@ -23,6 +23,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const { fullName, email, username, password } = req.body;
     console.log("email : ", email);
+    console.log("username : ", username);
+    console.log("fullName : ", fullName);
+    console.log("password : ", password);
 
     /*
     we can check each field like this
@@ -32,17 +35,18 @@ const registerUser = asyncHandler(async (req, res) => {
     }
         OR using array.some()
     */
-    if (
-        [fullName, email, username, password].some(
-            (field) => field.trim() === ""
-        )
-    ) {
+
+    // to check fields are not empty ->
+    if ([fullName, email, username, password].some((field) => { return field.trim() === ""})) 
+    {
         throw new ApiError(400, "All fields are required");
     }
 
     // check if user already exists...
     // we have to check both username and email so we need || operator.
-    const existedUser = User.findOne({
+
+    // here User is from db so put await here.
+    const existedUser = await User.findOne({
         $or: [{ username }, { email }],
     });
 
@@ -55,7 +59,19 @@ const registerUser = asyncHandler(async (req, res) => {
     // console this req.files and other things
     // here we are doing chaining.
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    // Here we expect that we surely get a path. but if we don't send a coverimage in res this will give error of undefined. in case of avatar image we check below and throw error but not for this so instead of this line.
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0)
+    {
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
+    else
+    {
+        coverImageLocalPath = null;
+    }
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required");
