@@ -470,6 +470,56 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, channel[0], "User channel fetched successfully"));
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage,
-    getUserChannelProfile
- };
+
+const getWatchHistory = asyncHandler(async (req, res) => {
+    // req.user._id => is not actual id but mongodb gives Object id which basically a string. Further mongoose will convert this Object id to original id. READ DOCS for more clarity.
+    const user = await User.aggregate([
+        { // get the User
+            $match: {
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        { // in user take watch history
+            $lookup: {
+                from: "videos",
+                localField: "watchHistory",
+                foreignField: "_id",
+                as: "watchHistory", // further nested pipeline starts
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner", // we only need some fields of User->
+                            pipline: [
+                                {
+                                    $project: {
+                                        fullName: 1,
+                                        username: 1,
+                                        avatar: 1
+                                    }
+                                },
+                                { // optional step -> after lookup we get array which further we need arr[o]th only, we directly give first ele as owner, the thing is frontend dev no need to create loop on user on array they get directly the value i.e. arr[0].
+                                    $addFields: {
+                                        // overwrite owner
+                                        owner: {
+                                            $first: "$owner"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ])
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user[0].watchHistory, "Watch history fetched successfully"));
+});
+
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory
+};
