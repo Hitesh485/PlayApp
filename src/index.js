@@ -8,6 +8,8 @@ import { app } from "./app.js";
 //     path: './env',
 // })
 
+
+// if connectDB success so then ->
 connectDB()
     // here this function is async so it will return a promise. that's why we use catch and then
 

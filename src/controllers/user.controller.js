@@ -80,6 +80,16 @@ const registerUser = asyncHandler(async (req, res) => {
     // file access may vary ->
     // console this req.files and other things
     // here we are doing chaining.
+
+    /*
+        "?." (Optional chaining)
+        Prevents your code from throwing an error if something doesn’t exist.
+
+        Example:
+
+        If req.files is undefined, the whole expression just returns undefined instead of crashing with “Cannot read property ‘avatar’ of undefined”.
+    */
+   
     const avatarLocalPath = req.files?.avatar[0]?.path;
 
     // Here we expect that we surely get a path. but if we don't send a coverimage in res this will give error of undefined. in case of avatar image we check below and throw error but not for this so instead of this line.

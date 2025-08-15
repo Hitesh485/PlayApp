@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// why use normal function here? -> callback fun does't have this ref.
+// why use normal function here? -> callback fun does't have "this" ref.
 // why async here ? -> bcrypt takes time to encrypt password.
 userSchema.pre("save", async function (next) {
     // this will update password only when password field coming.
